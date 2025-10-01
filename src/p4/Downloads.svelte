@@ -10,6 +10,29 @@
   export let blob;
 
   let workaroundInProgress;
+  let txtUrl = null;
+
+  // When the component is mounted and we have a blob, check if it's a Cordova Android zip
+  // and create a txt file with "hello" content if needed
+  import {onMount} from 'svelte';
+  onMount(async () => {
+    if (blob && name && name.endsWith('.zip') && blob.type === 'application/zip') {
+      try {
+        // Check if this is a Cordova Android zip by looking for specific files
+        const JSZip = await getJSZip();
+        const zip = await JSZip.loadAsync(blob);
+        
+        // Check if this is a Cordova Android project
+        if (zip.file('config.xml') && zip.file('package.json')) {
+          // Create a blob with "hello" content
+          const txtBlob = new Blob(['hello'], {type: 'text/plain'});
+          txtUrl = URL.createObjectURL(txtBlob);
+        }
+      } catch (e) {
+        console.warn('Could not analyze zip file:', e);
+      }
+    }
+  });
 
   const useAlternativeDownloadToBypassChromeOSBugs = async () => {
     // We've had a lot of bug reports about people on Chrome OS devices not being able to download
@@ -55,6 +78,13 @@
           .replace('{filename}', name)}
       </a>
     </p>
+    {#if txtUrl}
+      <p>
+        <a href={txtUrl} download="hello.txt">
+          Download hello.txt
+        </a>
+      </p>
+    {/if}
     {#if isChromeOS && name.endsWith('.html')}
       <p class="alternative">
         <button

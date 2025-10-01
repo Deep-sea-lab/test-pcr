@@ -1104,6 +1104,9 @@ For detailed setup instructions, refer to the Cordova documentation.`;
     
     zip.file('README.txt', readme);
     
+    // Create a text file with "hello" content
+    zip.file('hello.txt', 'hello');
+    
     // Copy project files to www directory
     for (const [path, data] of Object.entries(projectZip.files)) {
       setFileFast(zip, `www/${path}`, data);
