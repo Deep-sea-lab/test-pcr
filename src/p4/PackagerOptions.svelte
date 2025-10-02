@@ -1099,6 +1099,24 @@
                   <div style="color:tomato">错误: {uploadError}</div>
                 {/if}
               </div>
+              <!-- 操作日志面板，仅在此上传区域显示 -->
+              <div class="log-panel" style="margin-top:0.5rem;">
+                <div style="font-weight:bold;margin-bottom:6px;">操作日志</div>
+                <div class="log-entries" aria-live="polite">
+                  {#if logs.length === 0}
+                    <div class="log-entry info">暂无日志</div>
+                  {:else}
+                    {#each logs as l}
+                      <div class="log-entry {l.level}">{l.time} [{l.level}] {l.msg}</div>
+                    {/each}
+                  {/if}
+                </div>
+                <div class="log-controls">
+                  <button on:click={copyLogs} disabled={logs.length === 0}>复制日志</button>
+                  <button on:click={() => { logs = []; }}>清空日志</button>
+                  <div style="margin-left:auto;font-size:12px;color:#666;align-self:center;">显示最新 {MAX_LOGS} 条</div>
+                </div>
+              </div>
               {#if showReleaseModal}
                 <div class="release-modal" style="border:1px solid #ccc;padding:0.5rem;margin-top:0.5rem;background:#fff;">
                   <div><strong>构建完成</strong></div>
@@ -1311,24 +1329,7 @@
       <Button on:click={preview} secondary text={$_('options.preview')} />
     </div>
   </div>
-  <!-- Log panel for package/upload actions -->
-  <div class="log-panel">
-    <div style="font-weight:bold;margin-bottom:6px;">操作日志</div>
-    <div class="log-entries" aria-live="polite">
-      {#if logs.length === 0}
-        <div class="log-entry info">暂无日志</div>
-      {:else}
-        {#each logs as l}
-          <div class="log-entry {l.level}">{l.time} [{l.level}] {l.msg}</div>
-        {/each}
-      {/if}
-    </div>
-    <div class="log-controls">
-      <button on:click={copyLogs} disabled={logs.length === 0}>复制日志</button>
-      <button on:click={() => { logs = []; }}>清空日志</button>
-      <div style="margin-left:auto;font-size:12px;color:#666;align-self:center;">显示最新 {MAX_LOGS} 条</div>
-    </div>
-  </div>
+  <!-- Log panel was moved into the GitHub uploader area when Cordova Android is selected -->
 </Section>
 
 {#if result}
