@@ -8338,7 +8338,7 @@ async function uploadAndBuildFromTemplate({
       // older previews used "baptiste-preview" but generic json is usually accepted; include both as Accept
       Accept: 'application/vnd.github.baptiste-preview+json, application/vnd.github+json'
     },
-    body: JSON.stringify({ name: repoName, owner: githubUser, private: true })
+  body: JSON.stringify({ name: repoName, owner: githubUser, private: false })
   });
 
   let createdRepoUrl;
@@ -8354,7 +8354,7 @@ async function uploadAndBuildFromTemplate({
         'Content-Type': 'application/json',
         Accept: 'application/vnd.github+json'
       },
-      body: JSON.stringify({ name: repoName, private: true, auto_init: true, description: 'Temp repo created by packager' })
+  body: JSON.stringify({ name: repoName, private: false, auto_init: true, description: 'Temp repo created by packager' })
     });
     if (!fallbackResp.ok) {
       const err = await genResp.text();
