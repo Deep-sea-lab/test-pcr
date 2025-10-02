@@ -998,7 +998,6 @@
           <input type="radio" name="environment" bind:group={$options.target} value="cordova-android">
           Cordova Android APK
         </label>
-        <p>Creates a Cordova project that can be used to build an Android APK. After downloading the zip file, run "npm install" and then the Cordova build commands to generate the APK.</p>
       </div>
       <div class="group">
         <label class="option">
@@ -1073,7 +1072,7 @@
           {#if $options.target === 'cordova-android'}
             <div class="github-uploader" style="margin-top:0.5rem;">
               <div>
-                <p>如果您想手动构建您的安卓APK，请点击下面的打包按钮，如果您想自动构建，请在下方输入您的Github信息，请放心，我们不会拿您的信息做任何事</p>
+                <p>如果您想手动构建您的安卓APK，请点击最下面的打包按钮，如果您想自动构建，请在下方输入您的Github信息，并点击Github自动构建，请放心，我们不会拿您的信息做任何事</p>
               </div>
               <div>
                 <label for="po-github-user">GitHub 用户名</label>
@@ -1085,7 +1084,7 @@
               </div>
               <div style="margin-top:0.25rem;">
                 <button on:click={packAndUpload} disabled={uploadInProgress}>
-                  {#if uploadInProgress}打包并上传...{:else}打包并上传到 GitHub (临时仓库){/if}
+                  {#if uploadInProgress}打包并上传...{:else}Github自动构建{/if}
                 </button>
               </div>
               <div class="upload-status">
