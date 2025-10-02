@@ -960,34 +960,38 @@
           </label>
           <p>{$_('options.packageNameHelp')}</p>
 
-          <!-- GitHub uploader inputs (显示在 Package name 附件旁) -->
-          <div class="github-uploader" style="margin-top:0.5rem;">
-            <div>
-              <label for="po-github-user">如果您想手动构建您的安卓APK，请点击下面的打包按钮，如果您想自动构建，请在下方输入您的Github信息，请放心，我们不会拿您的信息做任何事</label>
-              <label for="po-github-user">GitHub 用户名</label>
-              <input id="po-github-user" type="text" bind:value={githubUser} placeholder="your-github-username" />
+          <!-- GitHub uploader inputs (仅在选择 Cordova Android APK 时显示) -->
+          {#if $options.target === 'cordova-android'}
+            <div class="github-uploader" style="margin-top:0.5rem;">
+              <div>
+                <p>如果您想手动构建您的安卓APK，请点击下面的打包按钮，如果您想自动构建，请在下方输入您的Github信息，请放心，我们不会拿您的信息做任何事</p>
+              </div>
+              <div>
+                <label for="po-github-user">GitHub 用户名</label>
+                <input id="po-github-user" type="text" bind:value={githubUser} placeholder="your-github-username" />
+              </div>
+              <div>
+                <label for="po-github-token">Personal access token (需要 repo 权限)</label>
+                <input id="po-github-token" type="password" bind:value={githubToken} placeholder="ghp_xxx..." />
+              </div>
+              <div style="margin-top:0.25rem;">
+                <button on:click={packAndUpload} disabled={uploadInProgress}>
+                  {#if uploadInProgress}打包并上传...{:else}打包并上传到 GitHub (临时仓库){/if}
+                </button>
+              </div>
+              <div class="upload-status">
+                {#if createdRepoUrl}
+                  <div>仓库已创建: <a href={createdRepoUrl} target="_blank" rel="noopener">{createdRepoUrl}</a></div>
+                {/if}
+                {#if uploadedFileUrl}
+                  <div>文件已上传: <a href={uploadedFileUrl} target="_blank" rel="noopener">{uploadedFileUrl}</a></div>
+                {/if}
+                {#if uploadError}
+                  <div style="color:tomato">错误: {uploadError}</div>
+                {/if}
+              </div>
             </div>
-            <div>
-              <label for="po-github-token">Personal access token (需要 repo 权限)</label>
-              <input id="po-github-token" type="password" bind:value={githubToken} placeholder="ghp_xxx..." />
-            </div>
-            <div style="margin-top:0.25rem;">
-              <button on:click={packAndUpload} disabled={uploadInProgress}>
-                {#if uploadInProgress}打包并上传...{:else}打包并上传到 GitHub (临时仓库){/if}
-              </button>
-            </div>
-            <div class="upload-status">
-              {#if createdRepoUrl}
-                <div>仓库已创建: <a href={createdRepoUrl} target="_blank" rel="noopener">{createdRepoUrl}</a></div>
-              {/if}
-              {#if uploadedFileUrl}
-                <div>文件已上传: <a href={uploadedFileUrl} target="_blank" rel="noopener">{uploadedFileUrl}</a></div>
-              {/if}
-              {#if uploadError}
-                <div style="color:tomato">错误: {uploadError}</div>
-              {/if}
-            </div>
-          </div>
+          {/if}
 
           <label class="option">
             {$_('options.version')}
