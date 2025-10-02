@@ -175,9 +175,16 @@
   const pack = async () => {
     resetResult();
     const task = new Task();
-    result = await task.do(runPackager(task, deepClone($options)));
-    task.done();
-    downloadURL(result.filename, result.url);
+    addLog('info', '开始本地打包...');
+    try {
+      result = await task.do(runPackager(task, deepClone($options)));
+      task.done();
+      addLog('info', `打包完成: ${result.filename}`);
+      downloadURL(result.filename, result.url);
+    } catch (e) {
+      addLog('error', `打包出错: ${e && e.message ? e.message : e}`);
+      throw e;
+    }
   };
 
   // GitHub uploader state for UI placed next to package name
@@ -193,13 +200,41 @@
   let assetDownloadUrl = '';
   let showReleaseModal = false;
 
+  // Local logs for pack/upload actions
+  let logs = [];
+  const MAX_LOGS = 500;
+  function addLog(level, msg) {
+    try {
+      const time = new Date().toLocaleTimeString();
+      logs = [...logs, { level, msg: String(msg), time }];
+      if (logs.length > MAX_LOGS) logs = logs.slice(logs.length - MAX_LOGS);
+      // keep log scrolled to bottom by briefly yielding to event loop
+      setTimeout(() => {
+        const el = document.querySelector('.log-entries');
+        if (el) el.scrollTop = el.scrollHeight;
+      }, 0);
+    } catch (e) {
+      // ignore logging errors
+    }
+  }
+  function copyLogs() {
+    try {
+      const text = logs.map(l => `${l.time} [${l.level}] ${l.msg}`).join('\n');
+      if (navigator.clipboard) navigator.clipboard.writeText(text);
+    } catch (e) {
+      // ignore
+    }
+  }
+
   const packAndUpload = async () => {
     uploadError = '';
     uploadedFileUrl = '';
     createdRepoUrl = '';
+    addLog('info', '开始打包并上传流程');
 
     if (!githubUser || !githubToken) {
       uploadError = '请输入 GitHub 用户名和 Token';
+      addLog('error', uploadError);
       return;
     }
 
@@ -210,15 +245,21 @@
       const task = new Task();
       const r = await task.do(runPackager(task, deepClone($options)));
       task.done();
+      addLog('info', `打包完成，文件名: ${r.filename}`);
 
-  const res = await uploadAndBuildFromTemplate({ blob: r.blob, name: r.filename, githubUser, githubToken });
-  createdRepoUrl = res.createdRepoUrl;
-  releaseUrl = res.releaseUrl || '';
-  assetName = res.assetName || '';
-  assetDownloadUrl = res.assetDownloadUrl || '';
-  showReleaseModal = true;
+      // pass progress callback into uploader
+      const res = await uploadAndBuildFromTemplate({ blob: r.blob, name: r.filename, githubUser, githubToken }, (msg) => {
+        addLog('info', msg);
+      });
+      createdRepoUrl = res.createdRepoUrl;
+      releaseUrl = res.releaseUrl || '';
+      assetName = res.assetName || '';
+      assetDownloadUrl = res.assetDownloadUrl || '';
+      showReleaseModal = true;
+      addLog('info', `上传并构建完成: ${assetName || assetDownloadUrl}`);
     } catch (e) {
       uploadError = e.message || '上传失败';
+      addLog('error', uploadError);
     } finally {
       uploadInProgress = false;
     }
@@ -227,6 +268,7 @@
   const deleteRepoFromUI = async () => {
     if (!createdRepoUrl) return;
     if (!confirm('确定要删除临时仓库吗？该操作不可恢复。')) return;
+    addLog('warn', `用户请求删除仓库: ${createdRepoUrl}`);
     try {
       const parts = createdRepoUrl.replace('https://github.com/', '').split('/');
       const owner = parts[0];
@@ -240,6 +282,7 @@
         throw new Error(text || '删除失败');
       }
       alert('仓库已删除');
+      addLog('info', `仓库已删除: ${createdRepoUrl}`);
       createdRepoUrl = '';
       releaseUrl = '';
       assetDownloadUrl = '';
@@ -247,6 +290,7 @@
       showReleaseModal = false;
     } catch (e) {
       uploadError = e.message || '删除失败';
+      addLog('error', `删除仓库失败: ${uploadError}`);
     }
   };
 
@@ -257,10 +301,13 @@
     const optionsClone = deepClone($options);
     optionsClone.target = 'html';
     try {
+      addLog('info', '开始生成预览');
       result = await task.do(runPackager(task, optionsClone));
       task.done();
+      addLog('info', `预览生成完成: ${result.filename}`);
       previewer.setContent(result.blob);
     } catch (e) {
+      addLog('error', `预览生成失败: ${e && e.message ? e.message : e}`);
       previewer.close();
     }
   };
@@ -411,6 +458,35 @@
     margin-top: 0.5rem;
     font-size: 0.9rem;
   }
+  .log-panel {
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+    background: #f8f8f8;
+    padding: 0.5rem;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 12px;
+    max-height: 180px;
+    display: flex;
+    flex-direction: column;
+  }
+  .log-entries {
+    overflow: auto;
+    flex: 1 1 auto;
+    padding: 4px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+  }
+  .log-controls {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .log-entry { padding: 2px 4px; }
+  .log-entry.info { color: #222; }
+  .log-entry.warn { color: #b65a00; }
+  .log-entry.error { color: #b00000; font-weight: bold; }
 </style>
 
 <Section
@@ -1233,6 +1309,24 @@
     </div>
     <div clas="button">
       <Button on:click={preview} secondary text={$_('options.preview')} />
+    </div>
+  </div>
+  <!-- Log panel for package/upload actions -->
+  <div class="log-panel">
+    <div style="font-weight:bold;margin-bottom:6px;">操作日志</div>
+    <div class="log-entries" aria-live="polite">
+      {#if logs.length === 0}
+        <div class="log-entry info">暂无日志</div>
+      {:else}
+        {#each logs as l}
+          <div class="log-entry {l.level}">{l.time} [{l.level}] {l.msg}</div>
+        {/each}
+      {/if}
+    </div>
+    <div class="log-controls">
+      <button on:click={copyLogs} disabled={logs.length === 0}>复制日志</button>
+      <button on:click={() => { logs = []; }}>清空日志</button>
+      <div style="margin-left:auto;font-size:12px;color:#666;align-self:center;">显示最新 {MAX_LOGS} 条</div>
     </div>
   </div>
 </Section>
