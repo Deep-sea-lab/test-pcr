@@ -356,16 +356,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// When the component is mounted and we have a blob, check if it's a Cordova Android zip
-// and create a txt file with "hello" content if needed
-
 
 function add_css(target) {
-	Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append_styles"])(target, "svelte-1u9hge", ".alternative.svelte-1u9hge{font-size:smaller}");
+	Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append_styles"])(target, "svelte-1o5fi9h", ".alternative.svelte-1o5fi9h.svelte-1o5fi9h{font-size:smaller}.github-uploader.svelte-1o5fi9h.svelte-1o5fi9h{margin-top:0.5rem;border:1px dashed #ccc;padding:0.5rem;border-radius:4px}.github-uploader.svelte-1o5fi9h input.svelte-1o5fi9h{width:100%;box-sizing:border-box;margin:0.25rem 0}.github-uploader.svelte-1o5fi9h button.svelte-1o5fi9h{margin-top:0.25rem}.upload-status.svelte-1o5fi9h.svelte-1o5fi9h{margin-top:0.5rem;font-size:0.9rem}");
 }
 
-// (81:4) {#if txtUrl}
-function create_if_block_1(ctx) {
+// (190:4) {#if txtUrl}
+function create_if_block_6(ctx) {
 	let p;
 	let a;
 	let t;
@@ -394,11 +391,11 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (88:4) {#if isChromeOS && name.endsWith('.html')}
-function create_if_block(ctx) {
+// (198:4) {#if isChromeOS && name.endsWith('.html')}
+function create_if_block_5(ctx) {
 	let p;
 	let button;
-	let t_value = /*$_*/ ctx[5]('downloads.useWorkaround') + "";
+	let t_value = /*$_*/ ctx[12]('downloads.useWorkaround') + "";
 	let t;
 	let mounted;
 	let dispose;
@@ -409,7 +406,7 @@ function create_if_block(ctx) {
 			button = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("button");
 			t = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(t_value);
 			button.disabled = /*workaroundInProgress*/ ctx[3];
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(p, "class", "alternative svelte-1u9hge");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(p, "class", "alternative svelte-1o5fi9h");
 		},
 		m(target, anchor) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, p, anchor);
@@ -417,12 +414,12 @@ function create_if_block(ctx) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(button, t);
 
 			if (!mounted) {
-				dispose = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(button, "click", /*useAlternativeDownloadToBypassChromeOSBugs*/ ctx[6]);
+				dispose = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(button, "click", /*useAlternativeDownloadToBypassChromeOSBugs*/ ctx[13]);
 				mounted = true;
 			}
 		},
 		p(ctx, dirty) {
-			if (dirty & /*$_*/ 32 && t_value !== (t_value = /*$_*/ ctx[5]('downloads.useWorkaround') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t, t_value);
+			if (dirty & /*$_*/ 4096 && t_value !== (t_value = /*$_*/ ctx[12]('downloads.useWorkaround') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t, t_value);
 
 			if (dirty & /*workaroundInProgress*/ 8) {
 				button.disabled = /*workaroundInProgress*/ ctx[3];
@@ -436,18 +433,335 @@ function create_if_block(ctx) {
 	};
 }
 
-// (72:0) <Section center>
+// (210:4) {#if isCordovaAndroid}
+function create_if_block(ctx) {
+	let div4;
+	let div0;
+	let label0;
+	let t1;
+	let input0;
+	let t2;
+	let div1;
+	let label1;
+	let t4;
+	let input1;
+	let t5;
+	let div2;
+	let button;
+	let t6;
+	let div3;
+	let t7;
+	let t8;
+	let mounted;
+	let dispose;
+
+	function select_block_type(ctx, dirty) {
+		if (/*uploadInProgress*/ ctx[8]) return create_if_block_4;
+		return create_else_block;
+	}
+
+	let current_block_type = select_block_type(ctx, -1);
+	let if_block0 = current_block_type(ctx);
+	let if_block1 = /*createdRepoUrl*/ ctx[11] && create_if_block_3(ctx);
+	let if_block2 = /*uploadedFileUrl*/ ctx[10] && create_if_block_2(ctx);
+	let if_block3 = /*uploadError*/ ctx[9] && create_if_block_1(ctx);
+
+	return {
+		c() {
+			div4 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			div0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			label0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
+			label0.textContent = "GitHub 用户名";
+			t1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			input0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("input");
+			t2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			div1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			label1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
+			label1.textContent = "Personal access token (需要 repo 权限)";
+			t4 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			input1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("input");
+			t5 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			div2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			button = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("button");
+			if_block0.c();
+			t6 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			div3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			if (if_block1) if_block1.c();
+			t7 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			if (if_block2) if_block2.c();
+			t8 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			if (if_block3) if_block3.c();
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label0, "for", "github-user");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input0, "id", "github-user");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input0, "type", "text");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input0, "placeholder", "your-github-username");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input0, "class", "svelte-1o5fi9h");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label1, "for", "github-token");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "id", "github-token");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "type", "password");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "placeholder", "ghp_xxx...");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "class", "svelte-1o5fi9h");
+			button.disabled = /*uploadInProgress*/ ctx[8];
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(button, "class", "svelte-1o5fi9h");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(div3, "class", "upload-status svelte-1o5fi9h");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(div4, "class", "github-uploader svelte-1o5fi9h");
+		},
+		m(target, anchor) {
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div4, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div0);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, label0);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, t1);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, input0);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input0, /*githubUser*/ ctx[6]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t2);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div1);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, label1);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, t4);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, input1);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input1, /*githubToken*/ ctx[7]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t5);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div2);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div2, button);
+			if_block0.m(button, null);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t6);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div3);
+			if (if_block1) if_block1.m(div3, null);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div3, t7);
+			if (if_block2) if_block2.m(div3, null);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div3, t8);
+			if (if_block3) if_block3.m(div3, null);
+
+			if (!mounted) {
+				dispose = [
+					Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(input0, "input", /*input0_input_handler*/ ctx[15]),
+					Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(input1, "input", /*input1_input_handler*/ ctx[16]),
+					Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(button, "click", /*uploadToGitHub*/ ctx[14])
+				];
+
+				mounted = true;
+			}
+		},
+		p(ctx, dirty) {
+			if (dirty & /*githubUser*/ 64 && input0.value !== /*githubUser*/ ctx[6]) {
+				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input0, /*githubUser*/ ctx[6]);
+			}
+
+			if (dirty & /*githubToken*/ 128 && input1.value !== /*githubToken*/ ctx[7]) {
+				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input1, /*githubToken*/ ctx[7]);
+			}
+
+			if (current_block_type !== (current_block_type = select_block_type(ctx, dirty))) {
+				if_block0.d(1);
+				if_block0 = current_block_type(ctx);
+
+				if (if_block0) {
+					if_block0.c();
+					if_block0.m(button, null);
+				}
+			}
+
+			if (dirty & /*uploadInProgress*/ 256) {
+				button.disabled = /*uploadInProgress*/ ctx[8];
+			}
+
+			if (/*createdRepoUrl*/ ctx[11]) {
+				if (if_block1) {
+					if_block1.p(ctx, dirty);
+				} else {
+					if_block1 = create_if_block_3(ctx);
+					if_block1.c();
+					if_block1.m(div3, t7);
+				}
+			} else if (if_block1) {
+				if_block1.d(1);
+				if_block1 = null;
+			}
+
+			if (/*uploadedFileUrl*/ ctx[10]) {
+				if (if_block2) {
+					if_block2.p(ctx, dirty);
+				} else {
+					if_block2 = create_if_block_2(ctx);
+					if_block2.c();
+					if_block2.m(div3, t8);
+				}
+			} else if (if_block2) {
+				if_block2.d(1);
+				if_block2 = null;
+			}
+
+			if (/*uploadError*/ ctx[9]) {
+				if (if_block3) {
+					if_block3.p(ctx, dirty);
+				} else {
+					if_block3 = create_if_block_1(ctx);
+					if_block3.c();
+					if_block3.m(div3, null);
+				}
+			} else if (if_block3) {
+				if_block3.d(1);
+				if_block3 = null;
+			}
+		},
+		d(detaching) {
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div4);
+			if_block0.d();
+			if (if_block1) if_block1.d();
+			if (if_block2) if_block2.d();
+			if (if_block3) if_block3.d();
+			mounted = false;
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["run_all"])(dispose);
+		}
+	};
+}
+
+// (224:12) {:else}
+function create_else_block(ctx) {
+	let t;
+
+	return {
+		c() {
+			t = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])("Upload to GitHub (临时仓库)");
+		},
+		m(target, anchor) {
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t, anchor);
+		},
+		d(detaching) {
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t);
+		}
+	};
+}
+
+// (222:12) {#if uploadInProgress}
+function create_if_block_4(ctx) {
+	let t;
+
+	return {
+		c() {
+			t = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])("Uploading...");
+		},
+		m(target, anchor) {
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t, anchor);
+		},
+		d(detaching) {
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t);
+		}
+	};
+}
+
+// (231:10) {#if createdRepoUrl}
+function create_if_block_3(ctx) {
+	let div;
+	let t0;
+	let a;
+	let t1;
+
+	return {
+		c() {
+			div = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			t0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])("仓库已创建: ");
+			a = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("a");
+			t1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(/*createdRepoUrl*/ ctx[11]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*createdRepoUrl*/ ctx[11]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "target", "_blank");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "rel", "noopener");
+		},
+		m(target, anchor) {
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t0);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, a);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(a, t1);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*createdRepoUrl*/ 2048) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t1, /*createdRepoUrl*/ ctx[11]);
+
+			if (dirty & /*createdRepoUrl*/ 2048) {
+				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*createdRepoUrl*/ ctx[11]);
+			}
+		},
+		d(detaching) {
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div);
+		}
+	};
+}
+
+// (234:10) {#if uploadedFileUrl}
+function create_if_block_2(ctx) {
+	let div;
+	let t0;
+	let a;
+	let t1;
+
+	return {
+		c() {
+			div = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			t0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])("文件已上传: ");
+			a = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("a");
+			t1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(/*uploadedFileUrl*/ ctx[10]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*uploadedFileUrl*/ ctx[10]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "target", "_blank");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "rel", "noopener");
+		},
+		m(target, anchor) {
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t0);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, a);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(a, t1);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*uploadedFileUrl*/ 1024) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t1, /*uploadedFileUrl*/ ctx[10]);
+
+			if (dirty & /*uploadedFileUrl*/ 1024) {
+				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*uploadedFileUrl*/ ctx[10]);
+			}
+		},
+		d(detaching) {
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div);
+		}
+	};
+}
+
+// (237:10) {#if uploadError}
+function create_if_block_1(ctx) {
+	let div;
+	let t0;
+	let t1;
+
+	return {
+		c() {
+			div = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			t0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])("错误: ");
+			t1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(/*uploadError*/ ctx[9]);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_style"])(div, "color", "tomato");
+		},
+		m(target, anchor) {
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t0);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t1);
+		},
+		p(ctx, dirty) {
+			if (dirty & /*uploadError*/ 512) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t1, /*uploadError*/ ctx[9]);
+		},
+		d(detaching) {
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div);
+		}
+	};
+}
+
+// (181:0) <Section center>
 function create_default_slot(ctx) {
 	let div;
 	let p;
 	let a;
-	let t0_value = /*$_*/ ctx[5]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "";
+	let t0_value = /*$_*/ ctx[12]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "";
 	let t0;
 	let t1;
 	let t2;
 	let show_if = _environment__WEBPACK_IMPORTED_MODULE_5__["isChromeOS"] && /*name*/ ctx[0].endsWith('.html');
-	let if_block0 = /*txtUrl*/ ctx[4] && create_if_block_1(ctx);
-	let if_block1 = show_if && create_if_block(ctx);
+	let t3;
+	let if_block0 = /*txtUrl*/ ctx[4] && create_if_block_6(ctx);
+	let if_block1 = show_if && create_if_block_5(ctx);
+	let if_block2 = /*isCordovaAndroid*/ ctx[5] && create_if_block(ctx);
 
 	return {
 		c() {
@@ -459,6 +773,8 @@ function create_default_slot(ctx) {
 			if (if_block0) if_block0.c();
 			t2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			if (if_block1) if_block1.c();
+			t3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			if (if_block2) if_block2.c();
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*url*/ ctx[1]);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "download", /*name*/ ctx[0]);
 		},
@@ -471,9 +787,11 @@ function create_default_slot(ctx) {
 			if (if_block0) if_block0.m(div, null);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t2);
 			if (if_block1) if_block1.m(div, null);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t3);
+			if (if_block2) if_block2.m(div, null);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*$_, blob, name*/ 37 && t0_value !== (t0_value = /*$_*/ ctx[5]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t0, t0_value);
+			if (dirty & /*$_, blob, name*/ 4101 && t0_value !== (t0_value = /*$_*/ ctx[12]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t0, t0_value);
 
 			if (dirty & /*url*/ 2) {
 				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*url*/ ctx[1]);
@@ -487,7 +805,7 @@ function create_default_slot(ctx) {
 				if (if_block0) {
 					if_block0.p(ctx, dirty);
 				} else {
-					if_block0 = create_if_block_1(ctx);
+					if_block0 = create_if_block_6(ctx);
 					if_block0.c();
 					if_block0.m(div, t2);
 				}
@@ -502,19 +820,33 @@ function create_default_slot(ctx) {
 				if (if_block1) {
 					if_block1.p(ctx, dirty);
 				} else {
-					if_block1 = create_if_block(ctx);
+					if_block1 = create_if_block_5(ctx);
 					if_block1.c();
-					if_block1.m(div, null);
+					if_block1.m(div, t3);
 				}
 			} else if (if_block1) {
 				if_block1.d(1);
 				if_block1 = null;
+			}
+
+			if (/*isCordovaAndroid*/ ctx[5]) {
+				if (if_block2) {
+					if_block2.p(ctx, dirty);
+				} else {
+					if_block2 = create_if_block(ctx);
+					if_block2.c();
+					if_block2.m(div, null);
+				}
+			} else if (if_block2) {
+				if_block2.d(1);
+				if_block2 = null;
 			}
 		},
 		d(detaching) {
 			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div);
 			if (if_block0) if_block0.d();
 			if (if_block1) if_block1.d();
+			if (if_block2) if_block2.d();
 		}
 	};
 }
@@ -542,7 +874,7 @@ function create_fragment(ctx) {
 		p(ctx, [dirty]) {
 			const section_changes = {};
 
-			if (dirty & /*$$scope, workaroundInProgress, $_, name, txtUrl, url, blob*/ 191) {
+			if (dirty & /*$$scope, uploadError, uploadedFileUrl, createdRepoUrl, uploadInProgress, githubToken, githubUser, isCordovaAndroid, workaroundInProgress, $_, name, txtUrl, url, blob*/ 139263) {
 				section_changes.$$scope = { dirty, ctx };
 			}
 
@@ -565,23 +897,36 @@ function create_fragment(ctx) {
 
 function instance($$self, $$props, $$invalidate) {
 	let $_;
-	Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["component_subscribe"])($$self, _locales__WEBPACK_IMPORTED_MODULE_2__["_"], $$value => $$invalidate(5, $_ = $$value));
+	Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["component_subscribe"])($$self, _locales__WEBPACK_IMPORTED_MODULE_2__["_"], $$value => $$invalidate(12, $_ = $$value));
 	let { name } = $$props;
 	let { url } = $$props;
 	let { blob } = $$props;
 	let workaroundInProgress;
 	let txtUrl = null;
 
+	// 新增：标记是否为 Cordova Android 包（在 onMount 检测）
+	let isCordovaAndroid = false;
+
+	// 新增：GitHub 上传相关状态与输入
+	let githubUser = '';
+
+	let githubToken = '';
+	let uploadInProgress = false;
+	let uploadError = '';
+	let uploadedFileUrl = '';
+	let createdRepoUrl = '';
+
+	// 当组件挂载且有 blob 时，检查是否为 Cordova Android zip 并在需要时创建 hello.txt
 	Object(svelte__WEBPACK_IMPORTED_MODULE_6__["onMount"])(async () => {
 		if (blob && name && name.endsWith('.zip') && blob.type === 'application/zip') {
 			try {
-				// Check if this is a Cordova Android zip by looking for specific files
 				const JSZip = await Object(_packager_packager__WEBPACK_IMPORTED_MODULE_3__["getJSZip"])();
-
 				const zip = await JSZip.loadAsync(blob);
 
-				// Check if this is a Cordova Android project
+				// 检测 Cordova Android 项目（配置文件与 package.json 同时存在）
 				if (zip.file('config.xml') && zip.file('package.json')) {
+					$$invalidate(5, isCordovaAndroid = true);
+
 					// Create a blob with "hello" content
 					const txtBlob = new Blob(['hello'], { type: 'text/plain' });
 
@@ -594,10 +939,6 @@ function instance($$self, $$props, $$invalidate) {
 	});
 
 	const useAlternativeDownloadToBypassChromeOSBugs = async () => {
-		// We've had a lot of bug reports about people on Chrome OS devices not being able to download
-		// HTML files but being able to download zip files just fine. We're pretty sure that's not our
-		// fault so we have to work around it (I want to blame whatever surveillance extensions
-		// they're being forced to install).
 		$$invalidate(3, workaroundInProgress = true);
 
 		try {
@@ -616,6 +957,111 @@ function instance($$self, $$props, $$invalidate) {
 		$$invalidate(3, workaroundInProgress = false);
 	};
 
+	// 新增：将当前要下载的文件上传到临时 GitHub 仓库
+	const uploadToGitHub = async () => {
+		$$invalidate(9, uploadError = '');
+		$$invalidate(10, uploadedFileUrl = '');
+		$$invalidate(11, createdRepoUrl = '');
+
+		if (!githubUser || !githubToken) {
+			$$invalidate(9, uploadError = '请输入 GitHub 用户名和 Token');
+			return;
+		}
+
+		if (!blob || !name) {
+			$$invalidate(9, uploadError = '没有可上传的文件');
+			return;
+		}
+
+		$$invalidate(8, uploadInProgress = true);
+
+		try {
+			// 生成一个唯一仓库名
+			const rand = Math.random().toString(36).slice(2, 8);
+
+			const repoName = `temp-packager-${Date.now().toString(36)}-${rand}`;
+
+			// 创建仓库（私有）
+			const createRepoResp = await fetch('https://api.github.com/user/repos', {
+				method: 'POST',
+				headers: {
+					'Authorization': `token ${githubToken}`,
+					'Content-Type': 'application/json',
+					'Accept': 'application/vnd.github+json'
+				},
+				body: JSON.stringify({
+					name: repoName,
+					private: true,
+					auto_init: false
+				})
+			});
+
+			if (!createRepoResp.ok) {
+				const errText = await createRepoResp.text();
+				throw new Error(`创建仓库失败: ${createRepoResp.status} ${errText}`);
+			}
+
+			const repoJson = await createRepoResp.json();
+
+			// 仓库页面
+			$$invalidate(11, createdRepoUrl = repoJson.html_url || `https://github.com/${githubUser}/${repoName}`);
+
+			// 读取 blob 并转为 base64
+			const arrayBuffer = await blob.arrayBuffer();
+
+			// 将 ArrayBuffer 转为 base64（分块以避免堆栈问题）
+			const bytes = new Uint8Array(arrayBuffer);
+
+			let binary = '';
+			const chunkSize = 0x8000;
+
+			for (let i = 0; i < bytes.length; i += chunkSize) {
+				binary += String.fromCharCode.apply(null, Array.from(bytes.subarray(i, i + chunkSize)));
+			}
+
+			const base64 = btoa(binary);
+
+			// 上传文件到仓库（contents API）
+			const putUrl = `https://api.github.com/repos/${githubUser}/${repoName}/contents/${name}`;
+
+			const putResp = await fetch(putUrl, {
+				method: 'PUT',
+				headers: {
+					'Authorization': `token ${githubToken}`,
+					'Content-Type': 'application/json',
+					'Accept': 'application/vnd.github+json'
+				},
+				body: JSON.stringify({
+					message: `Upload ${name} via packager`,
+					content: base64
+				})
+			});
+
+			if (!putResp.ok) {
+				const errText = await putResp.text();
+				throw new Error(`上传文件失败: ${putResp.status} ${errText}`);
+			}
+
+			const putJson = await putResp.json();
+			$$invalidate(10, uploadedFileUrl = putJson && putJson.content && putJson.content.html_url || `${createdRepoUrl}/blob/main/${encodeURIComponent(name)}`);
+		} catch(e) {
+			console.error('GitHub upload error', e);
+			$$invalidate(9, uploadError = e.message || '上传失败');
+		} finally {
+			$$invalidate(8, uploadInProgress = false);
+		}
+	};
+
+	function input0_input_handler() {
+		githubUser = this.value;
+		$$invalidate(6, githubUser);
+	}
+
+	function input1_input_handler() {
+		githubToken = this.value;
+		$$invalidate(7, githubToken);
+	}
+
 	$$self.$$set = $$props => {
 		if ('name' in $$props) $$invalidate(0, name = $$props.name);
 		if ('url' in $$props) $$invalidate(1, url = $$props.url);
@@ -628,8 +1074,18 @@ function instance($$self, $$props, $$invalidate) {
 		blob,
 		workaroundInProgress,
 		txtUrl,
+		isCordovaAndroid,
+		githubUser,
+		githubToken,
+		uploadInProgress,
+		uploadError,
+		uploadedFileUrl,
+		createdRepoUrl,
 		$_,
-		useAlternativeDownloadToBypassChromeOSBugs
+		useAlternativeDownloadToBypassChromeOSBugs,
+		uploadToGitHub,
+		input0_input_handler,
+		input1_input_handler
 	];
 }
 
