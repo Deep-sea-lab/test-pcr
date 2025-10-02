@@ -95,10 +95,5 @@
         </button>
       </p>
     {/if}
-
-    {#if isCordovaAndroid}
-      <!-- Cordova Android detected; upload UI moved to Package options -->
-      <div style="margin-top:0.5rem;">Cordova Android package detected. 要上传到 GitHub，请在 "Package name" 选项中填写 GitHub 用户名和 Token。</div>
-    {/if}
   </div>
 </Section>

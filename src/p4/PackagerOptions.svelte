@@ -963,6 +963,7 @@
           <!-- GitHub uploader inputs (显示在 Package name 附件旁) -->
           <div class="github-uploader" style="margin-top:0.5rem;">
             <div>
+              <label for="po-github-user">如果您想手动构建您的安卓APK，请点击下面的打包按钮，如果您想自动构建，请在下方输入您的Github信息，请放心，我们不会拿您的信息做任何事</label>
               <label for="po-github-user">GitHub 用户名</label>
               <input id="po-github-user" type="text" bind:value={githubUser} placeholder="your-github-username" />
             </div>
