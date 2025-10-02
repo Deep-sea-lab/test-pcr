@@ -6,7 +6,7 @@ export async function uploadAndBuildFromTemplate({
   templateOwner = 'Deep-sea-lab',
   templateRepo = '02packager-template',
   workflowId = 'main.yml',
-  autoDelete = true,
+  autoDelete = false,
   pollIntervalMs = 10000,
   pollMaxAttempts = 60
 }) {
@@ -207,35 +207,16 @@ export async function uploadAndBuildFromTemplate({
   const asset = releaseJson.assets[0];
   const downloadUrl = asset.browser_download_url;
 
-  // 6) Attempt to download asset (authorized) and trigger client download, then optionally delete repo
-  // Fetch the asset with Authorization to handle private repos
-  const assetResp = await fetch(downloadUrl, {
-    headers: { Authorization: `token ${githubToken}` },
-  });
-  if (!assetResp.ok) {
-    const err = await assetResp.text();
-    throw new Error(`下载资产失败: ${assetResp.status} ${err}`);
-  }
-  const assetBlob = await assetResp.blob();
+  // Do not auto-download asset in the browser. Return the asset download URL so the UI can present it to the user.
+  const assetDownloadUrl = downloadUrl;
 
-  // Trigger browser download
-  const blobUrl = URL.createObjectURL(assetBlob);
-  const a = document.createElement('a');
-  a.href = blobUrl;
-  a.download = asset.name || name;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(blobUrl);
-
-  // Optionally delete the repo
+  // Optionally delete the repo only if explicitly requested (default: false)
   if (autoDelete) {
     const delResp = await fetch(`${apiBase}/repos/${githubUser}/${repoName}`, {
       method: 'DELETE',
       headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github+json' }
     });
     if (!delResp.ok) {
-      // Not fatal: log and continue
       console.warn('删除临时仓库失败:', await delResp.text());
     }
   }
@@ -244,6 +225,7 @@ export async function uploadAndBuildFromTemplate({
   return {
     createdRepoUrl,
     releaseUrl: releaseJson.html_url || `${createdRepoUrl}/releases/latest`,
-    assetName: asset.name
+    assetName: asset.name,
+    assetDownloadUrl
   };
 }

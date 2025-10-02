@@ -190,6 +190,8 @@
   let createdRepoUrl = '';
   let releaseUrl = '';
   let assetName = '';
+  let assetDownloadUrl = '';
+  let showReleaseModal = false;
 
   const packAndUpload = async () => {
     uploadError = '';
@@ -213,10 +215,38 @@
   createdRepoUrl = res.createdRepoUrl;
   releaseUrl = res.releaseUrl || '';
   assetName = res.assetName || '';
+  assetDownloadUrl = res.assetDownloadUrl || '';
+  showReleaseModal = true;
     } catch (e) {
       uploadError = e.message || '上传失败';
     } finally {
       uploadInProgress = false;
+    }
+  };
+
+  const deleteRepoFromUI = async () => {
+    if (!createdRepoUrl) return;
+    if (!confirm('确定要删除临时仓库吗？该操作不可恢复。')) return;
+    try {
+      const parts = createdRepoUrl.replace('https://github.com/', '').split('/');
+      const owner = parts[0];
+      const repo = parts[1];
+      const resp = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+        method: 'DELETE',
+        headers: { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github+json' }
+      });
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || '删除失败');
+      }
+      alert('仓库已删除');
+      createdRepoUrl = '';
+      releaseUrl = '';
+      assetDownloadUrl = '';
+      assetName = '';
+      showReleaseModal = false;
+    } catch (e) {
+      uploadError = e.message || '删除失败';
     }
   };
 
@@ -993,6 +1023,28 @@
                   <div style="color:tomato">错误: {uploadError}</div>
                 {/if}
               </div>
+              {#if showReleaseModal}
+                <div class="release-modal" style="border:1px solid #ccc;padding:0.5rem;margin-top:0.5rem;background:#fff;">
+                  <div><strong>构建完成</strong></div>
+                  {#if assetName}
+                    <div>产物: {assetName}</div>
+                  {/if}
+                  {#if assetDownloadUrl}
+                    <div>下载链接: <a href={assetDownloadUrl} target="_blank" rel="noopener">{assetDownloadUrl}</a></div>
+                  {/if}
+                  {#if releaseUrl}
+                    <div>Release 页面: <a href={releaseUrl} target="_blank" rel="noopener">{releaseUrl}</a></div>
+                  {/if}
+                  <div style="margin-top:0.5rem;">
+                    <button on:click={() => { navigator.clipboard && assetDownloadUrl && navigator.clipboard.writeText(assetDownloadUrl); }}>复制下载链接</button>
+                    <button on:click={() => { showReleaseModal = false; }}>关闭</button>
+                    <button on:click={deleteRepoFromUI}>删除临时仓库</button>
+                  </div>
+                  {#if uploadError}
+                    <div style="color:tomato">错误: {uploadError}</div>
+                  {/if}
+                </div>
+              {/if}
             </div>
           {/if}
 
