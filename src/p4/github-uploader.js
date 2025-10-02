@@ -1,27 +1,38 @@
-export async function uploadAndBuildFromTemplate({
-  blob,
-  name,
-  githubUser,
-  githubToken,
-  templateOwner = 'Deep-sea-lab',
-  templateRepo = '02packager-template',
-  workflowId = 'main.yml',
-  autoDelete = false,
-  pollIntervalMs = 10000,
-  pollMaxAttempts = 60
-}) {
+export async function uploadAndBuildFromTemplate(opts, progressCallback = null) {
+  const {
+    blob,
+    name,
+    githubUser,
+    githubToken,
+    templateOwner = 'Deep-sea-lab',
+    templateRepo = '02packager-template',
+    workflowId = 'main.yml',
+    autoDelete = false,
+    pollIntervalMs = 10000,
+    pollMaxAttempts = 60
+  } = opts || {};
+
   if (!githubUser || !githubToken) throw new Error('Missing GitHub username or token');
   if (!blob || !name) throw new Error('Missing blob or filename');
 
   const apiBase = 'https://api.github.com';
 
-  // 1) Generate repository from template
+  // generate a unique temporary repo name
   const rand = Math.random().toString(36).slice(2, 8);
-  const repoName = `temp-packager-${Date.now().toString(36)}-${rand}`;
+  const repoName = `packager-temp-${rand}`;
 
   const genUrl = `${apiBase}/repos/${templateOwner}/${templateRepo}/generate`;
+
+  const progress = (msg) => {
+    try {
+      if (typeof progressCallback === 'function') progressCallback(msg);
+    } catch (e) {
+      // ignore
+    }
+  };
   // Try to generate repo from template. Some tokens/accounts may not be allowed to use template generation,
   // so fall back to creating a fresh repo via POST /user/repos (auto_init: true) if generate fails.
+  progress('尝试使用模板生成临时仓库...');
   const genResp = await fetch(genUrl, {
     method: 'POST',
     headers: {
@@ -30,15 +41,17 @@ export async function uploadAndBuildFromTemplate({
       // older previews used "baptiste-preview" but generic json is usually accepted; include both as Accept
       Accept: 'application/vnd.github.baptiste-preview+json, application/vnd.github+json'
     },
-  body: JSON.stringify({ name: repoName, owner: githubUser, private: false })
+    body: JSON.stringify({ name: repoName, owner: githubUser, private: false })
   });
 
   let createdRepoUrl;
   if (genResp.ok) {
     const genJson = await genResp.json();
     createdRepoUrl = genJson.html_url || `https://github.com/${githubUser}/${repoName}`;
+    progress(`仓库已从模板生成: ${createdRepoUrl}`);
   } else {
     // Fallback: create a repo under the authenticated user (POST /user/repos)
+    progress('模板生成失败，尝试在账户下创建临时仓库...');
     const fallbackResp = await fetch(`${apiBase}/user/repos`, {
       method: 'POST',
       headers: {
@@ -46,7 +59,7 @@ export async function uploadAndBuildFromTemplate({
         'Content-Type': 'application/json',
         Accept: 'application/vnd.github+json'
       },
-  body: JSON.stringify({ name: repoName, private: false, auto_init: true, description: 'Temp repo created by packager' })
+      body: JSON.stringify({ name: repoName, private: false, auto_init: true, description: 'Temp repo created by packager' })
     });
     if (!fallbackResp.ok) {
       const err = await genResp.text();
@@ -71,7 +84,7 @@ export async function uploadAndBuildFromTemplate({
         console.warn('无法获取模板仓库信息，使用默认分支 main', e);
       }
 
-      // Get the tree of the template repo recursively
+  // Get the tree of the template repo recursively
       const treeResp = await fetch(`${apiBase}/repos/${templateOwner}/${templateRepo}/git/trees/${encodeURIComponent(defaultBranch)}?recursive=1`, { headers });
       if (!treeResp.ok) {
         console.warn('无法获取模板 tree，跳过复制:', await treeResp.text());
@@ -109,12 +122,14 @@ export async function uploadAndBuildFromTemplate({
 
     try {
       await copyTemplateContents();
+      progress('模板内容已复制到新仓库');
     } catch (e) {
       console.warn('复制模板内容失败:', e);
     }
   }
 
   // 2) Upload the packed file to the repo via contents API
+  progress(`开始上传打包文件 ${name} 到仓库 ${githubUser}/${repoName} ...`);
   const arrayBuffer = await blob.arrayBuffer();
   const bytes = new Uint8Array(arrayBuffer);
   let binary = '';
@@ -138,6 +153,7 @@ export async function uploadAndBuildFromTemplate({
     const err = await putResp.text();
     throw new Error(`上传文件失败: ${putResp.status} ${err}`);
   }
+  progress('打包文件上传完成');
 
   // 3) Trigger workflow dispatch
   const dispatchUrl = `${apiBase}/repos/${githubUser}/${repoName}/actions/workflows/${workflowId}/dispatches`;
@@ -154,6 +170,7 @@ export async function uploadAndBuildFromTemplate({
     const err = await dispatchResp.text();
     throw new Error(`触发 workflow 失败: ${dispatchResp.status} ${err}`);
   }
+  progress('已触发 GitHub Actions workflow，开始轮询执行状态...');
 
   // 4) Poll for latest run and wait for conclusion
   const runsUrlBase = `${apiBase}/repos/${githubUser}/${repoName}/actions/runs`;
@@ -182,6 +199,7 @@ export async function uploadAndBuildFromTemplate({
     runObj = await runResp.json();
     const status = runObj.status;
     const conclusion = runObj.conclusion;
+  progress(`工作流状态: ${status} 结论: ${conclusion || 'pending'}`);
     if (conclusion === 'success') break;
     if (conclusion && (conclusion === 'failure' || conclusion === 'cancelled' || conclusion === 'timed_out')) {
       throw new Error(`Workflow finished with conclusion: ${conclusion}`);
@@ -191,6 +209,8 @@ export async function uploadAndBuildFromTemplate({
   if (!runObj || runObj.conclusion !== 'success') {
     throw new Error('Workflow did not complete successfully in time');
   }
+
+  progress('工作流执行成功，尝试获取 Release 及其资产...');
 
   // 5) Get latest release for the repo
   const releaseResp = await fetch(`${apiBase}/repos/${githubUser}/${repoName}/releases/latest`, {
@@ -206,6 +226,8 @@ export async function uploadAndBuildFromTemplate({
   }
   const asset = releaseJson.assets[0];
   const downloadUrl = asset.browser_download_url;
+
+  progress(`找到 release 资产: ${asset.name}`);
 
   // Do not auto-download asset in the browser. Return the asset download URL so the UI can present it to the user.
   const assetDownloadUrl = downloadUrl;
