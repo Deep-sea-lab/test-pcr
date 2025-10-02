@@ -8328,21 +8328,99 @@ async function uploadAndBuildFromTemplate({
   const repoName = `temp-packager-${Date.now().toString(36)}-${rand}`;
 
   const genUrl = `${apiBase}/repos/${templateOwner}/${templateRepo}/generate`;
+  // Try to generate repo from template. Some tokens/accounts may not be allowed to use template generation,
+  // so fall back to creating a fresh repo via POST /user/repos (auto_init: true) if generate fails.
   const genResp = await fetch(genUrl, {
     method: 'POST',
     headers: {
       Authorization: `token ${githubToken}`,
       'Content-Type': 'application/json',
-      Accept: 'application/vnd.github+json'
+      // older previews used "baptiste-preview" but generic json is usually accepted; include both as Accept
+      Accept: 'application/vnd.github.baptiste-preview+json, application/vnd.github+json'
     },
     body: JSON.stringify({ name: repoName, owner: githubUser, private: true })
   });
-  if (!genResp.ok) {
-    const err = await genResp.text();
-    throw new Error(`生成仓库失败: ${genResp.status} ${err}`);
+
+  let createdRepoUrl;
+  if (genResp.ok) {
+    const genJson = await genResp.json();
+    createdRepoUrl = genJson.html_url || `https://github.com/${githubUser}/${repoName}`;
+  } else {
+    // Fallback: create a repo under the authenticated user (POST /user/repos)
+    const fallbackResp = await fetch(`${apiBase}/user/repos`, {
+      method: 'POST',
+      headers: {
+        Authorization: `token ${githubToken}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/vnd.github+json'
+      },
+      body: JSON.stringify({ name: repoName, private: true, auto_init: true, description: 'Temp repo created by packager' })
+    });
+    if (!fallbackResp.ok) {
+      const err = await genResp.text();
+      const fbErr = await fallbackResp.text();
+      throw new Error(`无法生成或创建仓库 (generate status: ${genResp.status} / fallback status: ${fallbackResp.status}). 生成错误: ${err}; 创建错误: ${fbErr}`);
+    }
+    const fbJson = await fallbackResp.json();
+    createdRepoUrl = fbJson.html_url || `https://github.com/${githubUser}/${repoName}`;
+    // If the source "template" repo isn't an actual GitHub template, copy its contents into the new repo
+    async function copyTemplateContents() {
+      const headers = { Authorization: `token ${githubToken}`, Accept: 'application/vnd.github+json' };
+
+      // Determine default branch of template repo
+      let defaultBranch = 'main';
+      try {
+        const infoResp = await fetch(`${apiBase}/repos/${templateOwner}/${templateRepo}`, { headers });
+        if (infoResp.ok) {
+          const infoJson = await infoResp.json();
+          if (infoJson.default_branch) defaultBranch = infoJson.default_branch;
+        }
+      } catch (e) {
+        console.warn('无法获取模板仓库信息，使用默认分支 main', e);
+      }
+
+      // Get the tree of the template repo recursively
+      const treeResp = await fetch(`${apiBase}/repos/${templateOwner}/${templateRepo}/git/trees/${encodeURIComponent(defaultBranch)}?recursive=1`, { headers });
+      if (!treeResp.ok) {
+        console.warn('无法获取模板 tree，跳过复制:', await treeResp.text());
+        return;
+      }
+      const treeJson = await treeResp.json();
+      const blobs = (treeJson.tree || []).filter(i => i.type === 'blob');
+
+      for (const b of blobs) {
+        try {
+          const blobResp = await fetch(`${apiBase}/repos/${templateOwner}/${templateRepo}/git/blobs/${b.sha}`, { headers });
+          if (!blobResp.ok) {
+            console.warn(`无法获取 blob ${b.path}:`, await blobResp.text());
+            continue;
+          }
+          const blobJson = await blobResp.json();
+          let contentBase64 = blobJson.content || '';
+          // blob content may contain newlines
+          contentBase64 = contentBase64.replace(/\n/g, '');
+
+          // Upload to target repo via contents API
+          const putResp = await fetch(`${apiBase}/repos/${githubUser}/${repoName}/contents/${encodeURIComponent(b.path)}`, {
+            method: 'PUT',
+            headers: { Authorization: `token ${githubToken}`, 'Content-Type': 'application/json', Accept: 'application/vnd.github+json' },
+            body: JSON.stringify({ message: `Add template file ${b.path}`, content: contentBase64 })
+          });
+          if (!putResp.ok) {
+            console.warn(`上传模板文件失败 ${b.path}:`, await putResp.text());
+          }
+        } catch (err) {
+          console.warn('复制模板文件出错:', err);
+        }
+      }
+    }
+
+    try {
+      await copyTemplateContents();
+    } catch (e) {
+      console.warn('复制模板内容失败:', e);
+    }
   }
-  const genJson = await genResp.json();
-  const createdRepoUrl = genJson.html_url || `https://github.com/${githubUser}/${repoName}`;
 
   // 2) Upload the packed file to the repo via contents API
   const arrayBuffer = await blob.arrayBuffer();
