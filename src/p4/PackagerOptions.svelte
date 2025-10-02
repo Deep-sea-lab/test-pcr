@@ -181,13 +181,15 @@
   };
 
   // GitHub uploader state for UI placed next to package name
-  import { uploadBlobToTempRepo } from './github-uploader';
+  import { uploadAndBuildFromTemplate } from './github-uploader';
   let githubUser = '';
   let githubToken = '';
   let uploadInProgress = false;
   let uploadError = '';
   let uploadedFileUrl = '';
   let createdRepoUrl = '';
+  let releaseUrl = '';
+  let assetName = '';
 
   const packAndUpload = async () => {
     uploadError = '';
@@ -207,9 +209,10 @@
       const r = await task.do(runPackager(task, deepClone($options)));
       task.done();
 
-      const res = await uploadBlobToTempRepo({ blob: r.blob, name: r.filename, githubUser, githubToken });
-      createdRepoUrl = res.createdRepoUrl;
-      uploadedFileUrl = res.uploadedFileUrl;
+  const res = await uploadAndBuildFromTemplate({ blob: r.blob, name: r.filename, githubUser, githubToken });
+  createdRepoUrl = res.createdRepoUrl;
+  releaseUrl = res.releaseUrl || '';
+  assetName = res.assetName || '';
     } catch (e) {
       uploadError = e.message || '上传失败';
     } finally {
@@ -983,8 +986,8 @@
                 {#if createdRepoUrl}
                   <div>仓库已创建: <a href={createdRepoUrl} target="_blank" rel="noopener">{createdRepoUrl}</a></div>
                 {/if}
-                {#if uploadedFileUrl}
-                  <div>文件已上传: <a href={uploadedFileUrl} target="_blank" rel="noopener">{uploadedFileUrl}</a></div>
+                {#if releaseUrl}
+                  <div>构建产物 Release: <a href={releaseUrl} target="_blank" rel="noopener">{assetName ? assetName : releaseUrl}</a></div>
                 {/if}
                 {#if uploadError}
                   <div style="color:tomato">错误: {uploadError}</div>
