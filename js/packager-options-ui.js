@@ -362,7 +362,7 @@ function add_css(target) {
 }
 
 // (80:4) {#if txtUrl}
-function create_if_block_2(ctx) {
+function create_if_block_1(ctx) {
 	let p;
 	let a;
 	let t;
@@ -392,10 +392,10 @@ function create_if_block_2(ctx) {
 }
 
 // (88:4) {#if isChromeOS && name.endsWith('.html')}
-function create_if_block_1(ctx) {
+function create_if_block(ctx) {
 	let p;
 	let button;
-	let t_value = /*$_*/ ctx[6]('downloads.useWorkaround') + "";
+	let t_value = /*$_*/ ctx[5]('downloads.useWorkaround') + "";
 	let t;
 	let mounted;
 	let dispose;
@@ -414,12 +414,12 @@ function create_if_block_1(ctx) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(button, t);
 
 			if (!mounted) {
-				dispose = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(button, "click", /*useAlternativeDownloadToBypassChromeOSBugs*/ ctx[7]);
+				dispose = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["listen"])(button, "click", /*useAlternativeDownloadToBypassChromeOSBugs*/ ctx[6]);
 				mounted = true;
 			}
 		},
 		p(ctx, dirty) {
-			if (dirty & /*$_*/ 64 && t_value !== (t_value = /*$_*/ ctx[6]('downloads.useWorkaround') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t, t_value);
+			if (dirty & /*$_*/ 32 && t_value !== (t_value = /*$_*/ ctx[5]('downloads.useWorkaround') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t, t_value);
 
 			if (dirty & /*workaroundInProgress*/ 8) {
 				button.disabled = /*workaroundInProgress*/ ctx[3];
@@ -433,39 +433,18 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (99:4) {#if isCordovaAndroid}
-function create_if_block(ctx) {
-	let div;
-
-	return {
-		c() {
-			div = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
-			div.textContent = "Cordova Android package detected. 要上传到 GitHub，请在 \"Package name\" 选项中填写 GitHub 用户名和 Token。";
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_style"])(div, "margin-top", "0.5rem");
-		},
-		m(target, anchor) {
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div, anchor);
-		},
-		d(detaching) {
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div);
-		}
-	};
-}
-
 // (71:0) <Section center>
 function create_default_slot(ctx) {
 	let div;
 	let p;
 	let a;
-	let t0_value = /*$_*/ ctx[6]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "";
+	let t0_value = /*$_*/ ctx[5]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "";
 	let t0;
 	let t1;
 	let t2;
 	let show_if = _environment__WEBPACK_IMPORTED_MODULE_5__["isChromeOS"] && /*name*/ ctx[0].endsWith('.html');
-	let t3;
-	let if_block0 = /*txtUrl*/ ctx[4] && create_if_block_2(ctx);
-	let if_block1 = show_if && create_if_block_1(ctx);
-	let if_block2 = /*isCordovaAndroid*/ ctx[5] && create_if_block(ctx);
+	let if_block0 = /*txtUrl*/ ctx[4] && create_if_block_1(ctx);
+	let if_block1 = show_if && create_if_block(ctx);
 
 	return {
 		c() {
@@ -477,8 +456,6 @@ function create_default_slot(ctx) {
 			if (if_block0) if_block0.c();
 			t2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			if (if_block1) if_block1.c();
-			t3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			if (if_block2) if_block2.c();
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*url*/ ctx[1]);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "download", /*name*/ ctx[0]);
 		},
@@ -491,11 +468,9 @@ function create_default_slot(ctx) {
 			if (if_block0) if_block0.m(div, null);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t2);
 			if (if_block1) if_block1.m(div, null);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div, t3);
-			if (if_block2) if_block2.m(div, null);
 		},
 		p(ctx, dirty) {
-			if (dirty & /*$_, blob, name*/ 69 && t0_value !== (t0_value = /*$_*/ ctx[6]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t0, t0_value);
+			if (dirty & /*$_, blob, name*/ 37 && t0_value !== (t0_value = /*$_*/ ctx[5]('downloads.link').replace('{size}', `${(/*blob*/ ctx[2].size / 1000 / 1000).toFixed(2)}MB`).replace('{filename}', /*name*/ ctx[0]) + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t0, t0_value);
 
 			if (dirty & /*url*/ 2) {
 				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(a, "href", /*url*/ ctx[1]);
@@ -509,7 +484,7 @@ function create_default_slot(ctx) {
 				if (if_block0) {
 					if_block0.p(ctx, dirty);
 				} else {
-					if_block0 = create_if_block_2(ctx);
+					if_block0 = create_if_block_1(ctx);
 					if_block0.c();
 					if_block0.m(div, t2);
 				}
@@ -524,33 +499,19 @@ function create_default_slot(ctx) {
 				if (if_block1) {
 					if_block1.p(ctx, dirty);
 				} else {
-					if_block1 = create_if_block_1(ctx);
+					if_block1 = create_if_block(ctx);
 					if_block1.c();
-					if_block1.m(div, t3);
+					if_block1.m(div, null);
 				}
 			} else if (if_block1) {
 				if_block1.d(1);
 				if_block1 = null;
-			}
-
-			if (/*isCordovaAndroid*/ ctx[5]) {
-				if (if_block2) {
-					
-				} else {
-					if_block2 = create_if_block(ctx);
-					if_block2.c();
-					if_block2.m(div, null);
-				}
-			} else if (if_block2) {
-				if_block2.d(1);
-				if_block2 = null;
 			}
 		},
 		d(detaching) {
 			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div);
 			if (if_block0) if_block0.d();
 			if (if_block1) if_block1.d();
-			if (if_block2) if_block2.d();
 		}
 	};
 }
@@ -578,7 +539,7 @@ function create_fragment(ctx) {
 		p(ctx, [dirty]) {
 			const section_changes = {};
 
-			if (dirty & /*$$scope, isCordovaAndroid, workaroundInProgress, $_, name, txtUrl, url, blob*/ 383) {
+			if (dirty & /*$$scope, workaroundInProgress, $_, name, txtUrl, url, blob*/ 319) {
 				section_changes.$$scope = { dirty, ctx };
 			}
 
@@ -601,7 +562,7 @@ function create_fragment(ctx) {
 
 function instance($$self, $$props, $$invalidate) {
 	let $_;
-	Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["component_subscribe"])($$self, _locales__WEBPACK_IMPORTED_MODULE_2__["_"], $$value => $$invalidate(6, $_ = $$value));
+	Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["component_subscribe"])($$self, _locales__WEBPACK_IMPORTED_MODULE_2__["_"], $$value => $$invalidate(5, $_ = $$value));
 	let { name } = $$props;
 	let { url } = $$props;
 	let { blob } = $$props;
@@ -620,7 +581,7 @@ function instance($$self, $$props, $$invalidate) {
 
 				// 检测 Cordova Android 项目（配置文件与 package.json 同时存在）
 				if (zip.file('config.xml') && zip.file('package.json')) {
-					$$invalidate(5, isCordovaAndroid = true);
+					isCordovaAndroid = true;
 
 					// Create a blob with "hello" content
 					const txtBlob = new Blob(['hello'], { type: 'text/plain' });
@@ -664,7 +625,6 @@ function instance($$self, $$props, $$invalidate) {
 		blob,
 		workaroundInProgress,
 		txtUrl,
-		isCordovaAndroid,
 		$_,
 		useAlternativeDownloadToBypassChromeOSBugs
 	];
@@ -4843,38 +4803,40 @@ function create_else_block_1(ctx) {
 	let div0;
 	let label1;
 	let t8;
-	let input1;
-	let t9;
-	let div1;
 	let label2;
+	let t10;
+	let input1;
 	let t11;
+	let div1;
+	let label3;
+	let t13;
 	let input2;
-	let t12;
+	let t14;
 	let div2;
 	let button;
-	let t13;
-	let div3;
-	let t14;
 	let t15;
+	let div3;
 	let t16;
-	let label3;
-	let t17_value = /*$_*/ ctx[14]('options.version') + "";
 	let t17;
 	let t18;
-	let input3;
+	let label4;
+	let t19_value = /*$_*/ ctx[14]('options.version') + "";
 	let t19;
-	let p1;
-	let t20_value = /*$_*/ ctx[14]('options.versionHelp') + "";
 	let t20;
+	let input3;
 	let t21;
-	let show_if_6 = /*$options*/ ctx[1].target.includes('electron');
+	let p1;
+	let t22_value = /*$_*/ ctx[14]('options.versionHelp') + "";
 	let t22;
+	let t23;
+	let show_if_6 = /*$options*/ ctx[1].target.includes('electron');
+	let t24;
 	let div7;
-	let t34;
+	let t36;
 	let show_if_3;
 	let show_if_4;
 	let show_if_5;
-	let t35;
+	let t37;
 	let show_if;
 	let show_if_1;
 	let show_if_2;
@@ -4940,37 +4902,40 @@ function create_else_block_1(ctx) {
 			div4 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 			div0 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 			label1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
-			label1.textContent = "GitHub 用户名";
+			label1.textContent = "如果您想手动构建您的安卓APK，请点击下面的打包按钮，如果您想自动构建，请在下方输入您的Github信息，请放心，我们不会拿您的信息做任何事";
 			t8 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			input1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("input");
-			t9 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			div1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 			label2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
-			label2.textContent = "Personal access token (需要 repo 权限)";
+			label2.textContent = "GitHub 用户名";
+			t10 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			input1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("input");
 			t11 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			div1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
+			label3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
+			label3.textContent = "Personal access token (需要 repo 权限)";
+			t13 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			input2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("input");
-			t12 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			t14 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			div2 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 			button = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("button");
 			if_block0.c();
-			t13 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			t15 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			div3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 			if (if_block1) if_block1.c();
-			t14 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			if (if_block2) if_block2.c();
-			t15 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			if (if_block3) if_block3.c();
 			t16 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			label3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
-			t17 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(t17_value);
+			if (if_block2) if_block2.c();
+			t17 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			if (if_block3) if_block3.c();
 			t18 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			label4 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("label");
+			t19 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(t19_value);
+			t20 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			input3 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("input");
-			t19 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
-			p1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("p");
-			t20 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(t20_value);
 			t21 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			p1 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("p");
+			t22 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["text"])(t22_value);
+			t23 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			if (if_block4) if_block4.c();
-			t22 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			t24 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			div7 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["element"])("div");
 
 			div7.innerHTML = `<div>Creating native applications for specific platforms is discouraged. In most cases, Plain HTML or Zip will have numerous advantages:</div> 
@@ -4980,9 +4945,9 @@ function create_else_block_1(ctx) {
               <li>Can still be downloaded locally and run offline</li></ul> 
             <div>If you don&#39;t truly need to make a self-contained application for each platform (we understand there are some cases where this is necessary), we recommend you don&#39;t.</div>`;
 
-			t34 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			t36 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			if (if_block5) if_block5.c();
-			t35 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
+			t37 = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["space"])();
 			if (if_block6) if_block6.c();
 			if_block6_anchor = Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["empty"])();
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input0, "type", "text");
@@ -4992,11 +4957,12 @@ function create_else_block_1(ctx) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label0, "class", "option svelte-uui3re");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(p0, "class", "svelte-uui3re");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label1, "for", "po-github-user");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label2, "for", "po-github-user");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "id", "po-github-user");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "type", "text");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "placeholder", "your-github-username");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input1, "class", "svelte-uui3re");
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label2, "for", "po-github-token");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label3, "for", "po-github-token");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input2, "id", "po-github-token");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input2, "type", "password");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input2, "placeholder", "ghp_xxx...");
@@ -5012,7 +4978,7 @@ function create_else_block_1(ctx) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input3, "pattern", "\\d+\\.\\d+\\.\\d+");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input3, "placeholder", "1.0.0");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(input3, "minlength", "1");
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label3, "class", "option svelte-uui3re");
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(label4, "class", "option svelte-uui3re");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(p1, "class", "svelte-uui3re");
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["attr"])(div7, "class", "warning svelte-uui3re");
 		},
@@ -5033,41 +4999,43 @@ function create_else_block_1(ctx) {
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div0);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, label1);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, t8);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, label2);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, t10);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div0, input1);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input1, /*githubUser*/ ctx[8]);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t9);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t11);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div1);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, label2);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, t11);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, label3);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, t13);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div1, input2);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input2, /*githubToken*/ ctx[9]);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t12);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t14);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div2);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div2, button);
 			if_block0.m(button, null);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t13);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, t15);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div4, div3);
 			if (if_block1) if_block1.m(div3, null);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div3, t14);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div3, t16);
 			if (if_block2) if_block2.m(div3, null);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div3, t15);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(div3, t17);
 			if (if_block3) if_block3.m(div3, null);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t16, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, label3, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(label3, t17);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(label3, t18);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(label3, input3);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t18, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, label4, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(label4, t19);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(label4, t20);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(label4, input3);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input3, /*$options*/ ctx[1].app.version);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t19, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, p1, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(p1, t20);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t21, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, p1, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["append"])(p1, t22);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t23, anchor);
 			if (if_block4) if_block4.m(target, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t22, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t24, anchor);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, div7, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t34, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t36, anchor);
 			if (if_block5) if_block5.m(target, anchor);
-			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t35, anchor);
+			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, t37, anchor);
 			if (if_block6) if_block6.m(target, anchor);
 			Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["insert"])(target, if_block6_anchor, anchor);
 
@@ -5121,7 +5089,7 @@ function create_else_block_1(ctx) {
 				} else {
 					if_block1 = create_if_block_21(ctx);
 					if_block1.c();
-					if_block1.m(div3, t14);
+					if_block1.m(div3, t16);
 				}
 			} else if (if_block1) {
 				if_block1.d(1);
@@ -5134,7 +5102,7 @@ function create_else_block_1(ctx) {
 				} else {
 					if_block2 = create_if_block_20(ctx);
 					if_block2.c();
-					if_block2.m(div3, t15);
+					if_block2.m(div3, t17);
 				}
 			} else if (if_block2) {
 				if_block2.d(1);
@@ -5154,13 +5122,13 @@ function create_else_block_1(ctx) {
 				if_block3 = null;
 			}
 
-			if (dirty[0] & /*$_*/ 16384 && t17_value !== (t17_value = /*$_*/ ctx[14]('options.version') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t17, t17_value);
+			if (dirty[0] & /*$_*/ 16384 && t19_value !== (t19_value = /*$_*/ ctx[14]('options.version') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t19, t19_value);
 
 			if (dirty[0] & /*$options*/ 2 && input3.value !== /*$options*/ ctx[1].app.version) {
 				Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_input_value"])(input3, /*$options*/ ctx[1].app.version);
 			}
 
-			if (dirty[0] & /*$_*/ 16384 && t20_value !== (t20_value = /*$_*/ ctx[14]('options.versionHelp') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t20, t20_value);
+			if (dirty[0] & /*$_*/ 16384 && t22_value !== (t22_value = /*$_*/ ctx[14]('options.versionHelp') + "")) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["set_data"])(t22, t22_value);
 			if (dirty[0] & /*$options*/ 2) show_if_6 = /*$options*/ ctx[1].target.includes('electron');
 
 			if (show_if_6) {
@@ -5169,7 +5137,7 @@ function create_else_block_1(ctx) {
 				} else {
 					if_block4 = create_if_block_18(ctx);
 					if_block4.c();
-					if_block4.m(t22.parentNode, t22);
+					if_block4.m(t24.parentNode, t24);
 				}
 			} else if (if_block4) {
 				if_block4.d(1);
@@ -5182,7 +5150,7 @@ function create_else_block_1(ctx) {
 
 				if (if_block5) {
 					if_block5.c();
-					if_block5.m(t35.parentNode, t35);
+					if_block5.m(t37.parentNode, t37);
 				}
 			}
 
@@ -5210,21 +5178,21 @@ function create_else_block_1(ctx) {
 			if (if_block1) if_block1.d();
 			if (if_block2) if_block2.d();
 			if (if_block3) if_block3.d();
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t16);
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(label3);
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t19);
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(p1);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t18);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(label4);
 			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t21);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(p1);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t23);
 			if (if_block4) if_block4.d(detaching);
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t22);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t24);
 			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(div7);
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t34);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t36);
 
 			if (if_block5) {
 				if_block5.d(detaching);
 			}
 
-			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t35);
+			if (detaching) Object(svelte_internal__WEBPACK_IMPORTED_MODULE_0__["detach"])(t37);
 
 			if (if_block6) {
 				if_block6.d(detaching);
@@ -5266,7 +5234,7 @@ function create_if_block_6(ctx) {
 	};
 }
 
-// (975:46) {:else}
+// (976:46) {:else}
 function create_else_block_2(ctx) {
 	let t;
 
@@ -5283,7 +5251,7 @@ function create_else_block_2(ctx) {
 	};
 }
 
-// (975:16) {#if uploadInProgress}
+// (976:16) {#if uploadInProgress}
 function create_if_block_22(ctx) {
 	let t;
 
@@ -5300,7 +5268,7 @@ function create_if_block_22(ctx) {
 	};
 }
 
-// (979:14) {#if createdRepoUrl}
+// (980:14) {#if createdRepoUrl}
 function create_if_block_21(ctx) {
 	let div;
 	let t0;
@@ -5336,7 +5304,7 @@ function create_if_block_21(ctx) {
 	};
 }
 
-// (982:14) {#if uploadedFileUrl}
+// (983:14) {#if uploadedFileUrl}
 function create_if_block_20(ctx) {
 	let div;
 	let t0;
@@ -5372,7 +5340,7 @@ function create_if_block_20(ctx) {
 	};
 }
 
-// (985:14) {#if uploadError}
+// (986:14) {#if uploadError}
 function create_if_block_19(ctx) {
 	let div;
 	let t0;
@@ -5399,7 +5367,7 @@ function create_if_block_19(ctx) {
 	};
 }
 
-// (997:10) {#if $options.target.includes('electron')}
+// (998:10) {#if $options.target.includes('electron')}
 function create_if_block_18(ctx) {
 	let label0;
 	let t0_value = /*$_*/ ctx[14]('options.initalWindowSize') + "";
@@ -5594,7 +5562,7 @@ function create_if_block_18(ctx) {
 	};
 }
 
-// (1052:54) 
+// (1053:54) 
 function create_if_block_17(ctx) {
 	let div;
 
@@ -5614,7 +5582,7 @@ function create_if_block_17(ctx) {
 	};
 }
 
-// (1043:52) 
+// (1044:52) 
 function create_if_block_16(ctx) {
 	let div;
 
@@ -5636,7 +5604,7 @@ function create_if_block_16(ctx) {
 	};
 }
 
-// (1037:10) {#if $options.target.includes('win')}
+// (1038:10) {#if $options.target.includes('win')}
 function create_if_block_15(ctx) {
 	let div;
 
@@ -5657,7 +5625,7 @@ function create_if_block_15(ctx) {
 	};
 }
 
-// (1084:60) 
+// (1085:60) 
 function create_if_block_14(ctx) {
 	let div;
 
@@ -5684,7 +5652,7 @@ function create_if_block_14(ctx) {
 	};
 }
 
-// (1074:53) 
+// (1075:53) 
 function create_if_block_12(ctx) {
 	let div;
 	let h2;
@@ -5753,7 +5721,7 @@ function create_if_block_12(ctx) {
 	};
 }
 
-// (1059:10) {#if $options.target.includes('electron')}
+// (1060:10) {#if $options.target.includes('electron')}
 function create_if_block_7(ctx) {
 	let div;
 	let h2;
@@ -5822,7 +5790,7 @@ function create_if_block_7(ctx) {
 	};
 }
 
-// (1080:14) {#if $options.target.includes('mac')}
+// (1081:14) {#if $options.target.includes('mac')}
 function create_if_block_13(ctx) {
 	let p;
 
@@ -5841,7 +5809,7 @@ function create_if_block_13(ctx) {
 	};
 }
 
-// (1070:58) 
+// (1071:58) 
 function create_if_block_11(ctx) {
 	let p;
 
@@ -5861,7 +5829,7 @@ function create_if_block_11(ctx) {
 	};
 }
 
-// (1068:56) 
+// (1069:56) 
 function create_if_block_10(ctx) {
 	let p;
 
@@ -5881,7 +5849,7 @@ function create_if_block_10(ctx) {
 	};
 }
 
-// (1064:14) {#if $options.target.includes('win')}
+// (1065:14) {#if $options.target.includes('win')}
 function create_if_block_8(ctx) {
 	let show_if = /*$options*/ ctx[1].target.includes('32');
 	let if_block_anchor;
@@ -5919,7 +5887,7 @@ function create_if_block_8(ctx) {
 	};
 }
 
-// (1065:16) {#if $options.target.includes('32')}
+// (1066:16) {#if $options.target.includes('32')}
 function create_if_block_9(ctx) {
 	let p;
 
@@ -5982,7 +5950,7 @@ function create_default_slot_5(ctx) {
 	};
 }
 
-// (1104:0) {#if projectData.project.analysis.usesSteamworks}
+// (1105:0) {#if projectData.project.analysis.usesSteamworks}
 function create_if_block_2(ctx) {
 	let section;
 	let current;
@@ -6028,7 +5996,7 @@ function create_if_block_2(ctx) {
 	};
 }
 
-// (1134:4) {:else}
+// (1135:4) {:else}
 function create_else_block(ctx) {
 	let p;
 	let t0_value = /*$_*/ ctx[14]('options.steamworksUnavailable') + "";
@@ -6105,7 +6073,7 @@ function create_else_block(ctx) {
 	};
 }
 
-// (1114:4) {#if ['electron-win64', 'electron-linux64', 'electron-mac'].includes($options.target)}
+// (1115:4) {#if ['electron-win64', 'electron-linux64', 'electron-mac'].includes($options.target)}
 function create_if_block_3(ctx) {
 	let p;
 	let t0_value = /*$_*/ ctx[14]('options.steamworksAvailable').replace('{n}', '480') + "";
@@ -6253,7 +6221,7 @@ function create_if_block_3(ctx) {
 	};
 }
 
-// (1129:6) {#if $options.target === 'electron-mac'}
+// (1130:6) {#if $options.target === 'electron-mac'}
 function create_if_block_4(ctx) {
 	let p;
 	let t_value = /*$_*/ ctx[14]('options.steamworksMacWarning') + "";
@@ -6278,7 +6246,7 @@ function create_if_block_4(ctx) {
 	};
 }
 
-// (1105:2) <Section     accent="#136C9F"     reset={() => {       resetOptions([         'steamworks'       ]);     }}   >
+// (1106:2) <Section     accent="#136C9F"     reset={() => {       resetOptions([         'steamworks'       ]);     }}   >
 function create_default_slot_4(ctx) {
 	let h2;
 	let t0_value = /*$_*/ ctx[14]('options.steamworksExtension') + "";
@@ -6351,7 +6319,7 @@ function create_default_slot_4(ctx) {
 	};
 }
 
-// (1154:2) <DropArea on:drop={(e) => importOptionsFromDataTransfer(e.detail)}>
+// (1155:2) <DropArea on:drop={(e) => importOptionsFromDataTransfer(e.detail)}>
 function create_default_slot_3(ctx) {
 	let div3;
 	let div0;
@@ -6452,7 +6420,7 @@ function create_default_slot_3(ctx) {
 	};
 }
 
-// (1153:0) <Section>
+// (1154:0) <Section>
 function create_default_slot_2(ctx) {
 	let droparea;
 	let current;
@@ -6498,7 +6466,7 @@ function create_default_slot_2(ctx) {
 	};
 }
 
-// (1169:0) <Section>
+// (1170:0) <Section>
 function create_default_slot_1(ctx) {
 	let div2;
 	let div0;
@@ -6571,7 +6539,7 @@ function create_default_slot_1(ctx) {
 	};
 }
 
-// (1186:29) 
+// (1187:29) 
 function create_if_block_1(ctx) {
 	let section;
 	let current;
@@ -6616,7 +6584,7 @@ function create_if_block_1(ctx) {
 	};
 }
 
-// (1180:0) {#if result}
+// (1181:0) {#if result}
 function create_if_block(ctx) {
 	let downloads;
 	let current;
@@ -6659,7 +6627,7 @@ function create_if_block(ctx) {
 	};
 }
 
-// (1187:2) <Section caption>
+// (1188:2) <Section caption>
 function create_default_slot(ctx) {
 	let p;
 	let t_value = /*$_*/ ctx[14]('options.downloadsWillAppearHere') + "";
