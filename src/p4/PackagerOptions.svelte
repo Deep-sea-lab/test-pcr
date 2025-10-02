@@ -180,6 +180,43 @@
     downloadURL(result.filename, result.url);
   };
 
+  // GitHub uploader state for UI placed next to package name
+  import { uploadBlobToTempRepo } from './github-uploader';
+  let githubUser = '';
+  let githubToken = '';
+  let uploadInProgress = false;
+  let uploadError = '';
+  let uploadedFileUrl = '';
+  let createdRepoUrl = '';
+
+  const packAndUpload = async () => {
+    uploadError = '';
+    uploadedFileUrl = '';
+    createdRepoUrl = '';
+
+    if (!githubUser || !githubToken) {
+      uploadError = '请输入 GitHub 用户名和 Token';
+      return;
+    }
+
+    uploadInProgress = true;
+    try {
+      // run packager to produce a blob
+      resetResult();
+      const task = new Task();
+      const r = await task.do(runPackager(task, deepClone($options)));
+      task.done();
+
+      const res = await uploadBlobToTempRepo({ blob: r.blob, name: r.filename, githubUser, githubToken });
+      createdRepoUrl = res.createdRepoUrl;
+      uploadedFileUrl = res.uploadedFileUrl;
+    } catch (e) {
+      uploadError = e.message || '上传失败';
+    } finally {
+      uploadInProgress = false;
+    }
+  };
+
   const preview = async () => {
     resetResult();
     previewer = new Preview();
@@ -322,6 +359,24 @@
   .side-buttons {
     display: flex;
     margin-left: auto;
+  }
+  .github-uploader {
+    margin-top: 0.5rem;
+    border: 1px dashed #ccc;
+    padding: 0.5rem;
+    border-radius: 4px;
+  }
+  .github-uploader input {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0.25rem 0;
+  }
+  .github-uploader button {
+    margin-top: 0.25rem;
+  }
+  .upload-status {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
   }
 </style>
 
@@ -904,6 +959,34 @@
             <input type="text" bind:value={$options.app.packageName} pattern="[\w \-]+" minlength="1">
           </label>
           <p>{$_('options.packageNameHelp')}</p>
+
+          <!-- GitHub uploader inputs (显示在 Package name 附件旁) -->
+          <div class="github-uploader" style="margin-top:0.5rem;">
+            <div>
+              <label for="po-github-user">GitHub 用户名</label>
+              <input id="po-github-user" type="text" bind:value={githubUser} placeholder="your-github-username" />
+            </div>
+            <div>
+              <label for="po-github-token">Personal access token (需要 repo 权限)</label>
+              <input id="po-github-token" type="password" bind:value={githubToken} placeholder="ghp_xxx..." />
+            </div>
+            <div style="margin-top:0.25rem;">
+              <button on:click={packAndUpload} disabled={uploadInProgress}>
+                {#if uploadInProgress}打包并上传...{:else}打包并上传到 GitHub (临时仓库){/if}
+              </button>
+            </div>
+            <div class="upload-status">
+              {#if createdRepoUrl}
+                <div>仓库已创建: <a href={createdRepoUrl} target="_blank" rel="noopener">{createdRepoUrl}</a></div>
+              {/if}
+              {#if uploadedFileUrl}
+                <div>文件已上传: <a href={uploadedFileUrl} target="_blank" rel="noopener">{uploadedFileUrl}</a></div>
+              {/if}
+              {#if uploadError}
+                <div style="color:tomato">错误: {uploadError}</div>
+              {/if}
+            </div>
+          </div>
 
           <label class="option">
             {$_('options.version')}
